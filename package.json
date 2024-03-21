@@ -1,0 +1,13 @@
+{
+  "name": "clique-of-words",
+  "version": "1.0.0",
+  "description": "Web game for SOFTWARE ENGINEERING CAPSTONE final project",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
