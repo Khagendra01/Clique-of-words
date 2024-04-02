@@ -3,11 +3,22 @@
   "version": "1.0.0",
   "description": "Web game for SOFTWARE ENGINEERING CAPSTONE final project",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node functions/index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.10.0",
+    "firebase-functions": "^4.8.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.5.0",
+    "mongosh": "^2.2.2",
+    "nedb-promises": "^6.2.3"
+  }
 }

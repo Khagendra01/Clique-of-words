@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       password: loginPassword,
     };
 
-    fetch(`https://us-central1-wrodle-30466.cloudfunctions.net/function/login`, {
+    fetch(`https://localhost:3000/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       email: registerEmail,
     };
 
-    fetch('https://us-central1-wrodle-30466.cloudfunctions.net/function/users', {
+    fetch('https://localhost:3000/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
