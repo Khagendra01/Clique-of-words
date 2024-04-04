@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function getUserInformation() {
     // get the token from local storage
     const token = localStorage.getItem('token');
-    fetch(`https://us-central1-wrodle-30466.cloudfunctions.net/function/users/${token}`, {
+    fetch(`http://localhost:3000/users/${token}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -138,8 +138,13 @@ if(open || close_settings){
 
 
 //ROWS
-var rows = game_containter.children;
-
+var rows;
+if (game_containter) {
+    rows = game_containter.children;
+} else {
+    console.error('game_containter not found!');
+    // Handle the lack of game_containter accordingly
+}
 var words = ['', '', '', '', '', ''];
 var in_row = 0;
 var mywords = [];
@@ -309,7 +314,7 @@ $('#updateBtn').addEventListener('click', () => {
     // otherwise, if doc.ok,
     // alert("Your name and email have been updated.");
     // use .catch(err=>showError('ERROR: '+err)}) to show any other errors
-    fetch(`https://us-central1-wrodle-30466.cloudfunctions.net/function/users/${$('#username').innerText}`, {
+    fetch(`http://localhost:3000/users/${$('#username').innerText}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -341,7 +346,7 @@ $('#deleteBtn').addEventListener('click', () => {
     // otherwise, openLoginScreen()
     // use .catch(err=>showError('ERROR: '+err)}) to show any other errors'
     // sending token with header
-    fetch(`https://us-central1-wrodle-30466.cloudfunctions.net/function/users/${username}`, {
+    fetch(`http://localhost:3000/users/${username}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -365,7 +370,7 @@ $('#deleteBtn').addEventListener('click', () => {
 $('#logoutLink').addEventListener('click', () => {
     const username = $('#username').innerText;
 
-    fetch(`https://us-central1-wrodle-30466.cloudfunctions.net/function/logout/${username}`, {
+    fetch(`http://localhost:3000/logout/${username}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

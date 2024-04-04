@@ -3,16 +3,20 @@
 // on content load
 document.addEventListener('DOMContentLoaded', () => {
   const $ = document.querySelector.bind(document);
-
-  // login link action
-  $('#loginLink').addEventListener('click', openLoginScreen);
-
-  // register link action
-  $('#registerLink').addEventListener('click', openRegisterScreen);
-
+  const loginLink = document.getElementById('loginLink');
+  const registerLink = document.getElementById('registerLink');
+  
+  if (loginLink) {
+    loginLink.addEventListener('click', openLoginScreen);
+  }
+  
+  if (registerLink) {
+    registerLink.addEventListener('click', openRegisterScreen);
+  }
 
   // sign In button action
-  $('#loginBtn').addEventListener('click', () => {
+  $('#loginBtn').addEventListener('click', (event) => {
+    event.preventDefault();
     const loginUsername = $('#loginUsername').value;
     const loginPassword = $('#loginPassword').value;
 
@@ -27,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       password: loginPassword,
     };
 
-    fetch(`https://localhost:3000/login`, {
+    fetch(`http://localhost:3000/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -37,9 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(doc); // for debug
         if (doc.error) {
           showError(doc.error);
+          
         } else {
+         
           openHomeScreen(doc);
         }
+        console.log(data);
       })
       .catch(err => showError('ERROR: ' + err));
   });
@@ -64,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
       email: registerEmail,
     };
 
-    fetch('https://localhost:3000/users', {
+    fetch('http://localhost:3000/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -100,26 +107,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   function openLoginScreen() {
-    // hide other screens, clear inputs, clear error
-    $('#registerScreen').classList.add('hidden');
-    $('#homeScreen').classList.add('hidden');
-    resetInputs();
-    showError('');
-
-    // reveal login screen
-    $('#loginScreen').classList.remove('hidden');
+    const loginScreen = $('#loginScreen');
+    const registerScreen = $('#registerScreen');
+    if (loginScreen && registerScreen) {
+      registerScreen.classList.add('hidden');
+      resetInputs();
+      showError('');
+      loginScreen.classList.remove('hidden');
+    }
   }
 
 
   function openRegisterScreen() {
-    // hide other screens, clear inputs, clear error
-    $('#loginScreen').classList.add('hidden');
-    $('#homeScreen').classList.add('hidden');
-    resetInputs();
-    showError('');
-
-    // reveal register screen
-    $('#registerScreen').classList.remove('hidden');
+    const loginScreen = $('#loginScreen');
+    const homeScreen = $('#homeScreen');
+    const registerScreen = $('#registerScreen');
+    
+    if (loginScreen) {
+      loginScreen.classList.add('hidden');
+    }
+    
+    if (homeScreen) {
+      homeScreen.classList.add('hidden');
+    }
+    
+    if (registerScreen) {
+      resetInputs();
+      showError('');
+      registerScreen.classList.remove('hidden');
+    }
   }
   // Initial screen setup
   openLoginScreen();
