@@ -177,7 +177,7 @@ div:focus, button:focus {
   left: 70%;
 }
 .rules {
-  font-size: 30px;
+  font-size: 20px;
   grid-area: rules;
 }
 .heading {

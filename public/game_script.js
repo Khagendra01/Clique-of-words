@@ -138,159 +138,159 @@ if(open || close_settings){
 
 
 //ROWS
-var rows;
-if (game_containter) {
-    rows = game_containter.children;
-} else {
-    console.error('game_containter not found!');
-    // Handle the lack of game_containter accordingly
-}
-var words = ['', '', '', '', '', ''];
-var in_row = 0;
-var mywords = [];
+// var rows;
+// if (game_containter) {
+//     rows = game_containter.children;
+// } else {
+//     console.error('game_containter not found!');
+//     // Handle the lack of game_containter accordingly
+// }
+// var words = ['', '', '', '', '', ''];
+// var in_row = 0;
+// var mywords = [];
 // fill out the boxes with letters
-document.addEventListener('keyup', function (event) {
+// document.addEventListener('keyup', function (event) {
 
-    var s = event.key;
-    var key = event.keyCode || event.charCode;
+//     var s = event.key;
+//     var key = event.keyCode || event.charCode;
 
-    // input from keyboards
-    for (var i = 0; i < rows[0].children.length; i++) {
+//     // input from keyboards
+//     for (var i = 0; i < rows[0].children.length; i++) {
 
-        if (rows[in_row].children[i].firstElementChild.value == '' && String.fromCharCode(event.keyCode).match(/(\w|\s)/g)
-            && key != 9 && key != 13) {
-            rows[in_row].children[i].firstElementChild.value = s.toUpperCase();
-            mywords[in_row] += s.toLowerCase();
-            mywords[in_row] = mywords[in_row].replace("undefined", "");
-            break;
-        }
-    }
-    // backspace
-    if (key == 8 || key == 46) {
-        // if()
-        for (var j = 4; j >= 0; j--)
-            if (rows[in_row].children[j].firstElementChild.value != '') {
-                rows[in_row].children[j].firstElementChild.value = '';
-                mywords[in_row] = mywords[in_row].replace(mywords[in_row][j], '');
-                break;
-            }
-    }
+//         if (rows[in_row].children[i].firstElementChild.value == '' && String.fromCharCode(event.keyCode).match(/(\w|\s)/g)
+//             && key != 9 && key != 13) {
+//             rows[in_row].children[i].firstElementChild.value = s.toUpperCase();
+//             mywords[in_row] += s.toLowerCase();
+//             mywords[in_row] = mywords[in_row].replace("undefined", "");
+//             break;
+//         }
+//     }
+//     // backspace
+//     if (key == 8 || key == 46) {
+//         // if()
+//         for (var j = 4; j >= 0; j--)
+//             if (rows[in_row].children[j].firstElementChild.value != '') {
+//                 rows[in_row].children[j].firstElementChild.value = '';
+//                 mywords[in_row] = mywords[in_row].replace(mywords[in_row][j], '');
+//                 break;
+//             }
+//     }
 
 
-});
+// });
 
 
 // enter click actions
-document.addEventListener(
-    'keydown', (event) => {
+// document.addEventListener(
+//     'keydown', (event) => {
 
-        // if not 'enter key' just exit here
-        if (event.which == 13) {
+//         // if not 'enter key' just exit here
+//         if (event.which == 13) {
 
-            if (rows[in_row].children[4].firstElementChild.value != '') {
-                var checkable_word = String(mywords[in_row]).substring(0, 5);
-                if (array_of_words.includes(checkable_word)) {
-                    for (var i = 0; i < rows[in_row].children.length; i++) {
-                        words[in_row] += rows[in_row].children[i].firstElementChild.value;
-                    }
-                    checkTheWord();
-                }
-                else {
-                    mywords[in_row] = '';
-                    swal({
-                        title: "Wrong word!",
-                        text: "This word doesn't exsist, try another one!",
-                        icon: "warning",
-                        dangerMode: true,
-                    });
-                }
-
-
+//             if (rows[in_row].children[4].firstElementChild.value != '') {
+//                 var checkable_word = String(mywords[in_row]).substring(0, 5);
+//                 if (array_of_words.includes(checkable_word)) {
+//                     for (var i = 0; i < rows[in_row].children.length; i++) {
+//                         words[in_row] += rows[in_row].children[i].firstElementChild.value;
+//                     }
+//                     checkTheWord();
+//                 }
+//                 else {
+//                     mywords[in_row] = '';
+//                     swal({
+//                         title: "Wrong word!",
+//                         text: "This word doesn't exsist, try another one!",
+//                         icon: "warning",
+//                         dangerMode: true,
+//                     });
+//                 }
 
 
-            }
-            else {
-                swal({
-                    title: "Not enough letters!",
-                    text: "You have to fill out the row!",
-                    icon: "warning",
-                    dangerMode: true,
-                });
-            }
 
-        }
-    });
+
+//             }
+//             else {
+//                 swal({
+//                     title: "Not enough letters!",
+//                     text: "You have to fill out the row!",
+//                     icon: "warning",
+//                     dangerMode: true,
+//                 });
+//             }
+
+//         }
+//     });
 
 
 // word checker function
-function checkTheWord() {
+// function checkTheWord() {
 
-    //save the word to overwrite on it
-    var copy_of_guess = [...different_words[in_level]];
-    var guessed_correctly = 0;
+//     //save the word to overwrite on it
+//     var copy_of_guess = [...different_words[in_level]];
+//     var guessed_correctly = 0;
 
-    //mark correct guesses and take the letter out of   
-    for (var k in copy_of_guess)
-        if (copy_of_guess[k] == words[in_row][k]) {
-            correct_position[k] = 1;
-            different_words[in_level][k] = '';
-            rows[in_row].children[k].setAttribute('id', 'position_guessed_correctly');
-            guessed_correctly++;
+//     //mark correct guesses and take the letter out of   
+//     for (var k in copy_of_guess)
+//         if (copy_of_guess[k] == words[in_row][k]) {
+//             correct_position[k] = 1;
+//             different_words[in_level][k] = '';
+//             rows[in_row].children[k].setAttribute('id', 'position_guessed_correctly');
+//             guessed_correctly++;
 
-            // if all letters are marked remove event listeners and show modal
+//             // if all letters are marked remove event listeners and show modal
 
-            if (correct_position.filter(x => x == 1).length == 5) {
-                switch (sessionStorage.getItem('level')) {
-                    case "FIELD":
-                        { sessionStorage.setItem("level", "BEGIN"); break; }
-                    case "BEGIN":
-                        { sessionStorage.setItem("level", "SOLVE"); break; }
-                    case "SOLVE":
-                        { sessionStorage.setItem("level", "LANDS"); break; }
-                    case "LANDS":
-                        { sessionStorage.setItem("level", "STICK"); break; }
-                    case "STICK":
-                        { sessionStorage.setItem("level", "END"); break; }
-                    default:
-                        {
-                            sessionStorage.setItem("level", "BEGIN"); break;
-                        }
-                }
-                setTimeout(() => {
+//             if (correct_position.filter(x => x == 1).length == 5) {
+//                 switch (sessionStorage.getItem('level')) {
+//                     case "FIELD":
+//                         { sessionStorage.setItem("level", "BEGIN"); break; }
+//                     case "BEGIN":
+//                         { sessionStorage.setItem("level", "SOLVE"); break; }
+//                     case "SOLVE":
+//                         { sessionStorage.setItem("level", "LANDS"); break; }
+//                     case "LANDS":
+//                         { sessionStorage.setItem("level", "STICK"); break; }
+//                     case "STICK":
+//                         { sessionStorage.setItem("level", "END"); break; }
+//                     default:
+//                         {
+//                             sessionStorage.setItem("level", "BEGIN"); break;
+//                         }
+//                 }
+//                 setTimeout(() => {
 
-                    sessionStorage.setItem("level", "BEGIN");
-                    swal({
-                        title: "You've Won!",
-                        text: "You have found the word!",
-                        icon: "success",
-                    });
-                }, 300);
-                document.removeEventListener('keydown', event);
-                location.reload();
+//                     sessionStorage.setItem("level", "BEGIN");
+//                     swal({
+//                         title: "You've Won!",
+//                         text: "You have found the word!",
+//                         icon: "success",
+//                     });
+//                 }, 300);
+//                 document.removeEventListener('keydown', event);
+//                 location.reload();
 
-            }
-
-
-
-
-        }
-
-    // Check if there are anymore letters guessed in wrong position 
-    for (var k in different_words[in_level])
-        if (!correct_position[k]) {
-            if (different_words[in_level].includes(words[in_row][k])) {
-                rows[in_row].children[k].setAttribute('id', 'letter_guessed_correctly');
-            }
-            else { console.log('letter is wrong!') }
-        }
-
-    // don't go over 5 rows
-    if (in_row == 5) alert('game over');
-    else in_row++;
+//             }
 
 
 
-}
+
+//         }
+
+//     // Check if there are anymore letters guessed in wrong position 
+//     for (var k in different_words[in_level])
+//         if (!correct_position[k]) {
+//             if (different_words[in_level].includes(words[in_row][k])) {
+//                 rows[in_row].children[k].setAttribute('id', 'letter_guessed_correctly');
+//             }
+//             else { console.log('letter is wrong!') }
+//         }
+
+//     // don't go over 5 rows
+//     if (in_row == 5) alert('game over');
+//     else in_row++;
+
+
+
+// }
 // update button action - email and name information update
 $('#updateBtn').addEventListener('click', () => {
     // check to make sure no fields aren't blank
