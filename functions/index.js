@@ -1,3 +1,20 @@
+/**
+ * This file contains the implementation of various routes and functions for a login and registration system.
+ * It uses Express.js for handling HTTP requests, MongoDB for database operations, bcrypt for password hashing,
+ * jwt for token authentication, and Firebase Functions for serverless deployment.
+ * The file exports an Express app that handles the routes and middleware for the system.
+ *
+ * @file FILEPATH: /Users/gedena/Documents/GitHub/Clique-of-words/functions/index.js
+ * @requires express
+ * @requires mongodb
+ * @requires bcryptjs
+ * @requires jsonwebtoken
+ * @requires dotenv
+ * @requires firebase-functions
+ * @requires firebase-admin
+ * @requires cors
+ * @exports app - Express app instance
+ */
 const express = require("express");
 const {MongoClient} = require("mongodb");
 const bcrypt = require("bcryptjs");

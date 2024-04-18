@@ -40,9 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     unauthorized();
     fetchDatabase(level)
 
+    // dark mode toggle
     checkbox.addEventListener('change', function() {
         if (this.checked) {
-          // Apply the dark mode styling
+        
             gameHeading.style.color = '#fbfbfb';
             lifeLine.style.color = '#fbfbfb';
             life1.style.backgroundColor = '#fbfbfb';
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             life4.style.backgroundColor = '#fbfbfb';
 
         } else {
-          // Revert to the original styling when not checked
+        
           gameHeading.style.color = 'black'; 
            lifeLine.style.color = 'black';
            life1.style.backgroundColor = 'rgb(116, 102, 102)';
@@ -65,12 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const letters = document.querySelectorAll('#game_container .letter');
 
-        // Function to handle the push-down animation
+
         shuffle_words.addEventListener('click', () => {
-        // Select all letter input elements
+
+        /**
+         * Represents a collection of letter input elements.
+         * @type {NodeListOf<HTMLInputElement>}
+         */
         const letterInputs = document.querySelectorAll('#game_container .letter input');
-        
-        // Extract current words from placeholders
         const currentWords = Array.from(letterInputs, input => input.placeholder);
         
         // Shuffle the current words
@@ -87,11 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   
-      // Event listener for each letter
       letters.forEach(letter => {
           letter.addEventListener('click', () => {
-              pushDownAnimation(letter);  // Apply the push-down effect
-              updateSelection(letter);    // Toggle selection if applicable
+              pushDownAnimation(letter); 
+              updateSelection(letter);   
           });
       });
   
@@ -120,6 +122,16 @@ function updateSelection(letter) {
         letter.classList.toggle('selected');
     }
 }
+/**
+ * Checks the selected words and counts the categories they belong to.
+ * Notifies the user if they have found a category with four or more words.
+ */
+/**
+ * Checks the selected words and counts the categories they belong to.
+ * If a category has 4 or more words, it displays a success message.
+ * If a category has 3 words and no category has 4 or more words, it displays a warning message.
+ * If no category has 4 or more words and no category has 3 words, it displays a message to keep trying.
+ */
 function checkSelectedWords() {
     const selectedInputs = document.querySelectorAll('#game_container .letter.selected input');
     const categoryCounts = {};  // Initialize an object to count categories
@@ -256,7 +268,7 @@ function unauthorized() {
         console.log('Username is defined');
     }
 }
-// check level
+
 switch (sessionStorage.getItem('level')) {
     case "FIELD":
         { in_level = 0; break; }
@@ -402,7 +414,7 @@ $('#deleteBtn').addEventListener('click', () => {
 });
 
 
-// logout link action
+
 $('#logoutLink').addEventListener('click', () => {
     const username = $('#username').innerText;
 
@@ -430,12 +442,10 @@ $('#logoutLink').addEventListener('click', () => {
 });
 
 
-// error helped function
 function showError(err) {
     $('#error').innerText = err;
 }
 
-// restart the game
 function restart_the_game() {
     location.reload();
 }
