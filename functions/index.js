@@ -30,6 +30,18 @@ const getDatabase = async () => {
   }
 };
 
+const getWordsDatabase = async () => {
+  try {
+    const client = await MongoClient.connect(process.env.DB_FULL_URL);
+    console.log('Successfully connected to words MongoDB.');
+    return client.db("cliques");
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    throw new Error('Failed to connect to MongoDB.');
+  }
+};
+
+
 getDatabase().catch(console.error);
 // enable static routing to "./public" folder
 app.use(express.static("public"));
@@ -40,6 +52,33 @@ app.options("*", cors());
 // automatically decode all requests from JSON
 // and encode all responses into JSON
 app.use(express.json());
+
+// route to get all placeholders
+app.get('/placeholders/:level', async (req, res) => {
+  const levelNumber = req.params.level;  
+  const collectionName = `level${levelNumber}`;  // Construct the collection name dynamically
+
+  try {
+    const db = await getWordsDatabase();
+    const docs = await db.collection(collectionName).find({}).toArray();
+    
+    if (docs.length === 0) {
+      return res.status(404).send({ error: 'No placeholders found for level ' + levelNumber });
+    }
+    
+    const result = docs.map(doc => ({
+      categoryName: doc.categoryName,  
+      words: doc.words
+    }));
+
+    res.send(result);
+    
+  } catch (error) {
+    console.error('Error fetching placeholders for level ' + levelNumber + ':', error);
+    res.status(500).send({ error: 'An error occurred while fetching placeholders for level ' + levelNumber });
+  }
+});
+
 
 // information route
 app.post("/information", requireAuth, async (req, res) => {

@@ -50,9 +50,10 @@ div:focus, button:focus {
 
 /* main container*/
 .root .main-container {
+  
   position: absolute;
-  top: 10%;
-  height: 85%;
+  top: 10%; 
+  height: 80%;
   left: 4%;
   width: 90%;
   display: flex;
@@ -67,7 +68,7 @@ div:focus, button:focus {
   width: 50%;
   height: auto;
   position: relative;
-  top: 20px;
+  top: 0px;
   left: 0;
   display: flex;
   flex-direction: column;
@@ -75,15 +76,25 @@ div:focus, button:focus {
   overflow: unset;
   min-width: 520px;
 }
+.root .main-container .game-container .game-container-heading {
+  display: block;
+  margin: 20px 20px 20px 0px;
+  border: 0;
+  color: black;
+  position: relative;
+  text-align: center;
+  font-size: 40px;
+}
 .root .main-container .game-container .row {
   flex: 25%;
-  padding: 0 10px;
+  padding: 0 -20px;
   min-width: 10%;
-  margin: 20px;
+  margin: -20px;
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .root .main-container .game-container .row .letter {
@@ -99,17 +110,95 @@ div:focus, button:focus {
   justify-content: center;
   border-radius: 5%;
   box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
+  transition: transform 0.3s ease; 
+}
+
+.root .main-container .game-container .row .letter.push-down {
+  transform: translateY(10px); 
 }
 .root .main-container .game-container .row .letter input {
-  width: 60px;
+  width: 120px;
   height: 60px;
   color: #ffffff;
-  font-size: 50px;
+  font-size: 40px;
   text-align: center;
   background: transparent;
   border: none;
   outline: none;
+  
 }
+.root .main-container .game-container .row .selected {
+  background-color: #f6f7f9;
+  color: #070606 !important;
+  text-align: center;
+  border: none;
+  outline: none;
+}
+
+  
+.root .main-container .game-container .row .letter input::placeholder {
+  font-size: 15px;
+  word-wrap: break-word;
+  align-items: center;
+  overflow-wrap:normal;
+  white-space: wrap;
+  color: whitesmoke;
+  text-transform: uppercase;
+} 
+.root .main-container .game-container .row .selected input::placeholder {
+  font-size: 15px;
+  overflow-wrap: break-word;
+  white-space: wrap;
+  color: rgb(14, 13, 13);
+  text-transform: uppercase;
+}
+.root .main-container .game-container .game_info {
+  position: relative;
+  left: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.root .main-container .game-container .game_info .life_line {
+  display: inline-flex;
+  height: 60px;
+  position: relative;
+  top: -10%;
+  color: #111010;
+  font-size: 30px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.root .main-container .game-container .game_info .game_info_buttons{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 20px;
+
+}
+.root .main-container .game-container .game_info p{
+  position: inherit;
+}
+
+.root .main-container .game-container .game_info .mistakes_round{
+  position: inherit;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: rgb(116, 102, 102);
+
+}
+
 
 /* .root .option-container button {
   margin: 1px;
@@ -166,6 +255,8 @@ div:focus, button:focus {
     "info-update-button info-update-button info-update-button"
     "info-update-button info-update-button info-update-button";
 }
+
+
 .info-update-buttons{
   grid-area: info-update-button;
 }
@@ -182,6 +273,7 @@ div:focus, button:focus {
 }
 .heading {
   text-align: right;
+  
   grid-area: heading;
   font-weight: 600;
 }
@@ -207,7 +299,7 @@ div:focus, button:focus {
   font-size: 1.5rem;
   font-weight: 600;
 }
-.settings_container button {
+.settings_container button, .rules_container.popup #playGame, .root .main-container .game-container .game_info .game_info_buttons button{
   background-color: #2a2b39;
   color: #ffffff;
   border: 0;
@@ -217,6 +309,10 @@ div:focus, button:focus {
   margin: 20px 20px 40px 0px;
   width: 200px;
   position: relative;
+}
+.rules_container.popup #playGame{
+  left: 40%;
+  font-size: 20px;
 }
 .rules_container .user-information button {
   margin-left: -5px;
@@ -360,7 +456,7 @@ label:active:after {
 input:checked ~ label ~ .root {
   background: #143e61;
 }
-input:checked ~ label ~ .rules_container, input:checked ~ label ~ .settings_container {
+input:checked ~ label ~ .rules_container, input:checked ~ label ~ .settings_container{
   color: #fff;
   background: #0d0e0f;
 }
@@ -395,6 +491,13 @@ input:checked ~ label ~ * {
 
 /* Medium screens (641px to 1007px) */
 @media only screen and (max-width: 640px) {
+  .rules_container.popup #playGame{
+    position: relative;
+    left: 32%;
+  }
+  .title{
+    font-size: 40px !important;
+  }
   .hidden {
     display: none;
     height: 0;
@@ -434,8 +537,8 @@ input:checked ~ label ~ * {
     width: 0px;
   }
   .title{
-    font-size: 40px;
-    left: 25%;
+    font-size: 100px;
+    left: 40%;
   }
   .heading .rules_heading {
     width: fit-content;

@@ -48,19 +48,108 @@
                         </button>
                     </div>
                     <!-- main container for game -->
+                    
                     <div class="main-container">
-
+                       
+                       
                         <!-- defined div for game -->
                         <div class="game-container" id="game_container">
+                            <div class="game-container-heading"> <p>Find the clique of words!</p></div>
+                            <div class="row" id="row1">
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                        readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
 
-                            
+                            </div>
+                            <div class="row" id="row2">
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                            </div>
+                            <div class="row" id="row3">
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                            </div>
+                            <div class="row" id="row4">
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Python">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field" readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                                <div class="letter">
+                                    <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
+                                         readonly placeholder="Word">
+                                </div>
+                            </div>
+                            <div class="game_info">
+                                
+                                <div class="life_line">
+                                    <p>Mistakes Remaining:</p>
+                                    <div class="mistakes_round" id="life_1"></div>
+                                    <div class="mistakes_round" id="life_2"></div>
+                                    <div class="mistakes_round" id="life_3"></div>
+                                    <div class="mistakes_round" id="life_4"></div>
+                                </div>
+
+                                <div class="game_info_buttons">
+                                    <button id="check_words">Check</button>
+                                    <button id="clear_selection">Clear</button>
+                                    <button id="shuffle_words">Shuffle</button>
+                                </div>  
+                            </div>
 
                         </div>
                         <span id="error"></span>
                     </div>
                 </div>
                 <div class="rules_container popup" id="rules_container">
-                    <h1 class="title">Clique Of Words!</h1>
+                    <h1 class="title" style="position: relative; left: 45%;">Clique Of Words!</h1>
 
                     <div class="rules">
 
@@ -72,7 +161,7 @@
                         <p>Select four items and tap 'Submit' to check if your guess is correct.
                         </p>
                         <p>Find the groups without making 4 mistakes!</p>
-                        <h4>Category Examples</h4>
+                        <h3 style="font-weight: 600;">Category Examples:</h3>
                            <ul>
                             <li><span style="color: rgb(160, 25, 49);">PROGRAMMING LANGUAGES:</span> Python, Java, Rust, Ruby</li>
                             <li><span style="color: rgb(25, 160, 106);">Animal:</span>Python, Buffalo, Cougar, Wolf</li>
@@ -80,9 +169,11 @@
                            </ul> 
                         <div class="rules-correct-position"></div>
                         <p>Be careful! Some different categories may have <i>similar</i> word!
-                        </p>Each puzzle has exactly one solution!
+                        </p>
+                        <p>Each puzzle has exactly one solution!</p>
                         <hr class="solid">
                         <h2>Good luck!</h2>
+                        <button id="playGame">Play</button>
                     </div>
                     <button id="close"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                         <path

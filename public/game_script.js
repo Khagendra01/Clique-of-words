@@ -7,21 +7,220 @@ const restart = document.getElementById("restart");
 const rules_container = document.getElementById('rules_container');
 const settings_container = document.getElementById('settings_container');
 const close = document.getElementById('close');
+const play = document.getElementById('playGame');
 const close_settings = document.getElementById('close_settings');
 const root = document.getElementById('root');
 const game_containter = document.getElementById('game_container');
 const different_words = ["FIELD", "BEGIN", "SOLVE", "LANDS", "STICK"];
+const checkbox = document.getElementById('darkmode-toggle');
+const gameHeading = document.querySelector('.game-container-heading');
+const lifeLine = document.querySelector('.life_line');
+const shuffle_words = document.getElementById('shuffle_words');
 const words_level = 0;
 var correct_position = []
 var correct_letter = []
 var array_of_words;
 var in_level = 0;
+const level = 1;
+var categories = {};
+
+// life balls
+const life1 = document.getElementById('life_1');
+const life2 = document.getElementById('life_2');
+const life3 = document.getElementById('life_3');
+const life4 = document.getElementById('life_4');
+
+// lifeline buttons
+const check_selections = document.getElementById('check_words');
+const clear_selections = document.getElementById('clear_selection');
 
 // get information and authorization on load
 document.addEventListener('DOMContentLoaded', () => {
     getUserInformation();
     unauthorized();
+    fetchDatabase(level)
+
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          // Apply the dark mode styling
+            gameHeading.style.color = '#fbfbfb';
+            lifeLine.style.color = '#fbfbfb';
+            life1.style.backgroundColor = '#fbfbfb';
+            life2.style.backgroundColor = '#fbfbfb';
+            life3.style.backgroundColor = '#fbfbfb';
+            life4.style.backgroundColor = '#fbfbfb';
+
+        } else {
+          // Revert to the original styling when not checked
+          gameHeading.style.color = 'black'; 
+           lifeLine.style.color = 'black';
+           life1.style.backgroundColor = 'rgb(116, 102, 102)';
+           life2.style.backgroundColor = 'rgb(116, 102, 102)';
+           life3.style.backgroundColor = 'rgb(116, 102, 102)';
+           life4.style.backgroundColor = 'rgb(116, 102, 102)';
+        }
+      });
+
+      check_selections.addEventListener('click', checkSelectedWords);
+
+      const letters = document.querySelectorAll('#game_container .letter');
+
+        // Function to handle the push-down animation
+        shuffle_words.addEventListener('click', () => {
+        // Select all letter input elements
+        const letterInputs = document.querySelectorAll('#game_container .letter input');
+        
+        // Extract current words from placeholders
+        const currentWords = Array.from(letterInputs, input => input.placeholder);
+        
+        // Shuffle the current words
+        const shuffledWords = shuffleArray(currentWords);
+      
+        // Re-assign the shuffled words to the input placeholders
+        letterInputs.forEach((input, index) => {
+          input.placeholder = shuffledWords[index];
+        });
+        letters.forEach(letter => {
+            letter.classList.remove('selected');
+        });
+      });
+
+
+  
+      // Event listener for each letter
+      letters.forEach(letter => {
+          letter.addEventListener('click', () => {
+              pushDownAnimation(letter);  // Apply the push-down effect
+              updateSelection(letter);    // Toggle selection if applicable
+          });
+      });
+  
+      // Handle the clear selection button
+      const clearButton = document.getElementById('clear_selection');
+      clearButton.addEventListener('click', () => {
+          letters.forEach(letter => {
+              letter.classList.remove('selected');
+          });
+      });
+
 });
+
+function pushDownAnimation(letter) {
+    letter.classList.add('push-down');
+    setTimeout(() => {
+        letter.classList.remove('push-down');
+    }, 200); // This timeout should match the duration of the CSS transition
+}
+
+// Function to update the selection based on the current state
+function updateSelection(letter) {
+    const selectedLetters = document.querySelectorAll('#game_container .letter.selected');
+    // Check the current state and total selected before toggling
+    if (selectedLetters.length < 4 || letter.classList.contains('selected')) {
+        letter.classList.toggle('selected');
+    }
+}
+function checkSelectedWords() {
+    const selectedInputs = document.querySelectorAll('#game_container .letter.selected input');
+    const categoryCounts = {};  // Initialize an object to count categories
+
+    // Count categories for selected words
+    selectedInputs.forEach(input => {
+        const inputText = input.placeholder.toUpperCase();  // Get the placeholder text in uppercase
+        let found = false;
+
+        Object.keys(categories).forEach(category => {
+            if (categories[category].includes(inputText)) {
+                if (!categoryCounts[category]) {
+                    categoryCounts[category] = 0;  // Initialize if not already
+                }
+                categoryCounts[category]++;  // Increment the count for this category
+                found = true;
+            }
+        });
+
+        if (!found) {
+            console.log(`Word: ${inputText} does not belong to any known category.`);
+        }
+    });
+
+    // Check if any category has 4 or more words
+    let win = false;
+    let almostWin = false
+    Object.keys(categoryCounts).forEach(category => {
+        if (categoryCounts[category] >= 4) {
+            swal({
+                title: "You've found category!",
+                text:  category,
+                icon: "success",
+            });
+            console.log(`You won! Four words belong to the category: ${category}`);
+            win = true;
+        }
+        if (categoryCounts[category] = 3 && !win) {
+            swal({
+                title: "Almost there!",
+                text: "You have found 3 word for 1 category!",
+                icon: "warning",
+                dangerMode: true,
+            });
+            console.log(`1 more to go the category: ${category}`);
+            almostWin = true;
+        }
+    });
+
+    if (!win && !almostWin && selectedInputs.length > 0) {  // Check if there were any selections at all
+        console.log("Keep trying! No category has four matching words yet.");
+    }
+}
+
+function fetchDatabase(level) {
+
+    fetch(`http://localhost:3000/placeholders/${level}`)
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then((data) => {
+        categories = {};  // Initialize categories anew
+    
+        data.forEach(item => {
+            categories[item.categoryName] = item.words.map(word => word.toUpperCase());  // Ensure words are in uppercase for consistent comparison
+            console.log('Category:', item.categoryName, 'Words:', item.words);
+        });
+    
+        console.log(categories);
+        setupGame(categories);  // Proceed to set up the game
+    })
+    .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+function setupGame(categories) {
+    const allWords = Object.values(categories).flat();
+  
+    // Shuffle the array to randomize the order of words
+    const shuffledWords = shuffleArray(allWords);
+    const letterInputs = document.querySelectorAll('#game_container .letter input');
+
+  // Assign the shuffled words to the input placeholders
+  letterInputs.forEach((input, index) => {
+    input.placeholder = shuffledWords[index] || ""; // Use an empty string if there are not enough words
+  });
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        // Swap elements array[i] and array[j]
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+}
 
 // fetch with authentication
 function getUserInformation() {
@@ -79,30 +278,22 @@ switch (sessionStorage.getItem('level')) {
 // level display
 var heading = $(".title");
 if (heading !== null) {
-    heading.innerHTML = "Word Number " + (in_level + 1);
+    heading.innerHTML = "Level " + (in_level + 1);
 }
-
-// fetching the words   
-// fetch https://raw.githubusercontent.com/charlesreid1/five-letter-words/master/sgb-words.txt
-try {
-    jQuery.get('https://raw.githubusercontent.com/charlesreid1/five-letter-words/master/sgb-words.txt', function (data) {
-        array_of_words = JSON.stringify(data).replace(/"/g, '').replaceAll('\\n', ' ').split(/\s+/);
-    });
-}
-catch (error) {
-    console.log("there was an error!");
-    console.error(error);
-};
-
 
 //MODALS
-if (rules || close) {
+if (rules || close || play) {
     rules.addEventListener('click', () => {
         rules_container.classList.add('popup');
         settings_container.classList.add('hidden');
         root.classList.add('blured');
     });
     close.addEventListener('click', () => {
+        rules_container.classList.remove('popup');
+        settings_container.classList.remove('hidden');
+        root.classList.remove('blured');
+    });
+    play.addEventListener('click', () => {
         rules_container.classList.remove('popup');
         settings_container.classList.remove('hidden');
         root.classList.remove('blured');
@@ -138,159 +329,16 @@ if(open || close_settings){
 
 
 //ROWS
-// var rows;
-// if (game_containter) {
-//     rows = game_containter.children;
-// } else {
-//     console.error('game_containter not found!');
-//     // Handle the lack of game_containter accordingly
-// }
-// var words = ['', '', '', '', '', ''];
-// var in_row = 0;
-// var mywords = [];
-// fill out the boxes with letters
-// document.addEventListener('keyup', function (event) {
+if (game_container) {
+    rows = Array.from(game_container.children).slice(1); // Convert children to array and skip the first element
+} else {
+    console.error('game_container not found!');
+    // Handle the lack of game_container accordingly
+}
+var words = ['', '', '', '', '', ''];
+var in_row = 0;
+var mywords = [];
 
-//     var s = event.key;
-//     var key = event.keyCode || event.charCode;
-
-//     // input from keyboards
-//     for (var i = 0; i < rows[0].children.length; i++) {
-
-//         if (rows[in_row].children[i].firstElementChild.value == '' && String.fromCharCode(event.keyCode).match(/(\w|\s)/g)
-//             && key != 9 && key != 13) {
-//             rows[in_row].children[i].firstElementChild.value = s.toUpperCase();
-//             mywords[in_row] += s.toLowerCase();
-//             mywords[in_row] = mywords[in_row].replace("undefined", "");
-//             break;
-//         }
-//     }
-//     // backspace
-//     if (key == 8 || key == 46) {
-//         // if()
-//         for (var j = 4; j >= 0; j--)
-//             if (rows[in_row].children[j].firstElementChild.value != '') {
-//                 rows[in_row].children[j].firstElementChild.value = '';
-//                 mywords[in_row] = mywords[in_row].replace(mywords[in_row][j], '');
-//                 break;
-//             }
-//     }
-
-
-// });
-
-
-// enter click actions
-// document.addEventListener(
-//     'keydown', (event) => {
-
-//         // if not 'enter key' just exit here
-//         if (event.which == 13) {
-
-//             if (rows[in_row].children[4].firstElementChild.value != '') {
-//                 var checkable_word = String(mywords[in_row]).substring(0, 5);
-//                 if (array_of_words.includes(checkable_word)) {
-//                     for (var i = 0; i < rows[in_row].children.length; i++) {
-//                         words[in_row] += rows[in_row].children[i].firstElementChild.value;
-//                     }
-//                     checkTheWord();
-//                 }
-//                 else {
-//                     mywords[in_row] = '';
-//                     swal({
-//                         title: "Wrong word!",
-//                         text: "This word doesn't exsist, try another one!",
-//                         icon: "warning",
-//                         dangerMode: true,
-//                     });
-//                 }
-
-
-
-
-//             }
-//             else {
-//                 swal({
-//                     title: "Not enough letters!",
-//                     text: "You have to fill out the row!",
-//                     icon: "warning",
-//                     dangerMode: true,
-//                 });
-//             }
-
-//         }
-//     });
-
-
-// word checker function
-// function checkTheWord() {
-
-//     //save the word to overwrite on it
-//     var copy_of_guess = [...different_words[in_level]];
-//     var guessed_correctly = 0;
-
-//     //mark correct guesses and take the letter out of   
-//     for (var k in copy_of_guess)
-//         if (copy_of_guess[k] == words[in_row][k]) {
-//             correct_position[k] = 1;
-//             different_words[in_level][k] = '';
-//             rows[in_row].children[k].setAttribute('id', 'position_guessed_correctly');
-//             guessed_correctly++;
-
-//             // if all letters are marked remove event listeners and show modal
-
-//             if (correct_position.filter(x => x == 1).length == 5) {
-//                 switch (sessionStorage.getItem('level')) {
-//                     case "FIELD":
-//                         { sessionStorage.setItem("level", "BEGIN"); break; }
-//                     case "BEGIN":
-//                         { sessionStorage.setItem("level", "SOLVE"); break; }
-//                     case "SOLVE":
-//                         { sessionStorage.setItem("level", "LANDS"); break; }
-//                     case "LANDS":
-//                         { sessionStorage.setItem("level", "STICK"); break; }
-//                     case "STICK":
-//                         { sessionStorage.setItem("level", "END"); break; }
-//                     default:
-//                         {
-//                             sessionStorage.setItem("level", "BEGIN"); break;
-//                         }
-//                 }
-//                 setTimeout(() => {
-
-//                     sessionStorage.setItem("level", "BEGIN");
-//                     swal({
-//                         title: "You've Won!",
-//                         text: "You have found the word!",
-//                         icon: "success",
-//                     });
-//                 }, 300);
-//                 document.removeEventListener('keydown', event);
-//                 location.reload();
-
-//             }
-
-
-
-
-//         }
-
-//     // Check if there are anymore letters guessed in wrong position 
-//     for (var k in different_words[in_level])
-//         if (!correct_position[k]) {
-//             if (different_words[in_level].includes(words[in_row][k])) {
-//                 rows[in_row].children[k].setAttribute('id', 'letter_guessed_correctly');
-//             }
-//             else { console.log('letter is wrong!') }
-//         }
-
-//     // don't go over 5 rows
-//     if (in_row == 5) alert('game over');
-//     else in_row++;
-
-
-
-// }
 // update button action - email and name information update
 $('#updateBtn').addEventListener('click', () => {
     // check to make sure no fields aren't blank
@@ -307,13 +355,7 @@ $('#updateBtn').addEventListener('click', () => {
         name: $('#updateName').value, 
         email: $('#updateEmail').value
     };
-    // PATCH /users/{username}, where {username} is $('#username').innerText
-    // convert data (defined above) to json, and send via PATCH to /users/{username}
-    // decode response from json to object called doc
-    // if doc.error, showError(doc.error)
-    // otherwise, if doc.ok,
-    // alert("Your name and email have been updated.");
-    // use .catch(err=>showError('ERROR: '+err)}) to show any other errors
+    
     fetch(`http://localhost:3000/users/${$('#username').innerText}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -340,12 +382,6 @@ $('#deleteBtn').addEventListener('click', () => {
     const username = $('#username').innerText;
     const token = localStorage.getItem('token'); 
 
-    // DELETE /users/{username}, where {username} is $('#username').innerText
-    // decode response from json to object called doc
-    // if doc.error, showError(doc.error)
-    // otherwise, openLoginScreen()
-    // use .catch(err=>showError('ERROR: '+err)}) to show any other errors'
-    // sending token with header
     fetch(`http://localhost:3000/users/${username}`, {
         method: 'DELETE',
         headers: {
