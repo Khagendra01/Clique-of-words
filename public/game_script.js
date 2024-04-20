@@ -20,6 +20,7 @@ const guessed_row1 = document.getElementById('guessed_row1');
 const guessed_row2 = document.getElementById('guessed_row2');
 const guessed_row3 = document.getElementById('guessed_row3');
 const guessed_row4 = document.getElementById('guessed_row4');
+const clearButton = document.getElementById('clear_selection');
 const words_level = 0;
 var correct_position = []
 var correct_letter = []
@@ -29,7 +30,7 @@ const level = 1;
 var categories = {};
 var categorySelectedWords = {};
 var categoryRowNumber = {};
-var shuffledWords = [];  // Global declaration
+var shuffledWords = [];
 
 
 // life balls
@@ -49,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchDatabase(level)
 
     // dark mode toggle
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
         if (this.checked) {
-        
+
             gameHeading.style.color = '#fbfbfb';
             lifeLine.style.color = '#fbfbfb';
             life1.style.backgroundColor = '#fbfbfb';
@@ -60,61 +61,51 @@ document.addEventListener('DOMContentLoaded', () => {
             life4.style.backgroundColor = '#fbfbfb';
 
         } else {
-        
-          gameHeading.style.color = 'black'; 
-           lifeLine.style.color = 'black';
-           life1.style.backgroundColor = 'rgb(116, 102, 102)';
-           life2.style.backgroundColor = 'rgb(116, 102, 102)';
-           life3.style.backgroundColor = 'rgb(116, 102, 102)';
-           life4.style.backgroundColor = 'rgb(116, 102, 102)';
+
+            gameHeading.style.color = 'black';
+            lifeLine.style.color = 'black';
+            life1.style.backgroundColor = 'rgb(116, 102, 102)';
+            life2.style.backgroundColor = 'rgb(116, 102, 102)';
+            life3.style.backgroundColor = 'rgb(116, 102, 102)';
+            life4.style.backgroundColor = 'rgb(116, 102, 102)';
         }
-      });
+    });
 
-      check_selections.addEventListener('click', checkSelectedWords);
+    check_selections.addEventListener('click', checkSelectedWords);
 
-      const letters = document.querySelectorAll('#game_container .letter');
+    const letters = document.querySelectorAll('#game_container .letter');
 
 
-      shuffle_words.addEventListener('click', () => {
-        // Select only the letter inputs in rows that are not hidden
+    shuffle_words.addEventListener('click', () => {
+        //letter inputs in rows that are not hidden
         const visibleLetterInputs = Array.from(document.querySelectorAll('#game_container .row'))
-                                         .filter(row => row.style.display !== 'none') // Filter out rows that are hidden
-                                         .flatMap(row => Array.from(row.querySelectorAll('.letter input'))); // Get inputs from visible rows
-    
-        // Extract the current words from these inputs
+            .filter(row => row.style.display !== 'none') // Filter out rows that are hidden
+            .flatMap(row => Array.from(row.querySelectorAll('.letter input'))); // Get inputs from visible rows
+
+        //extract the current words from these inputs
         const currentWords = visibleLetterInputs.map(input => input.placeholder);
-    
-        // Shuffle the current words
         shuffledWords = shuffleArray(currentWords);
-    
-        // Re-assign the shuffled words to the input placeholders of visible rows only
+
+        //re-assign the shuffled words to the input placeholders of visible rows only
         visibleLetterInputs.forEach((input, index) => {
-          input.placeholder = shuffledWords[index];
+            input.placeholder = shuffledWords[index];
         });
-    
-        // Deselect all selected letters in visible rows
         visibleLetterInputs.forEach(letter => {
             letter.classList.remove('selected');
         });
     });
-    
-
-
-  
-      letters.forEach(letter => {
-          letter.addEventListener('click', () => {
-              pushDownAnimation(letter); 
-              updateSelection(letter);   
-          });
-      });
-  
-      // Handle the clear selection button
-      const clearButton = document.getElementById('clear_selection');
-      clearButton.addEventListener('click', () => {
-          letters.forEach(letter => {
-              letter.classList.remove('selected');
-          });
-      });
+    letters.forEach(letter => {
+        letter.addEventListener('click', () => {
+            pushDownAnimation(letter);
+            updateSelection(letter);
+        });
+    });
+    //clear selection button
+    clearButton.addEventListener('click', () => {
+        letters.forEach(letter => {
+            letter.classList.remove('selected');
+        });
+    });
 
 });
 
@@ -250,28 +241,28 @@ function reshuffleAndReassignWords() {
 
 function fetchDatabase(level) {
     fetch(`http://localhost:3000/placeholders/${level}`)
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then((data) => {
-        categories = {};  // Initialize categories anew
-        categorySelectedWords = {};
-        categoryRowNumber = {};
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            categories = {};  // Initialize categories anew
+            categorySelectedWords = {};
+            categoryRowNumber = {};
 
-        data.forEach(item => {
-            categories[item.categoryName] = item.words.map(word => word.toUpperCase());
-            categorySelectedWords[item.categoryName] = 0;
-            categoryRowNumber[item.categoryName] = item.row;
+            data.forEach(item => {
+                categories[item.categoryName] = item.words.map(word => word.toUpperCase());
+                categorySelectedWords[item.categoryName] = 0;
+                categoryRowNumber[item.categoryName] = item.row;
+            });
+
+            setupGame(categories, data);  // Pass the categories and raw data to setupGame
+        })
+        .catch((error) => {
+            console.error('There was a problem with the fetch operation:', error);
         });
-
-        setupGame(categories, data);  // Pass the categories and raw data to setupGame
-    })
-    .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-    });
 }
 
 function setupGame(categories, data) {
@@ -387,7 +378,7 @@ if (rules || close || play) {
         }
     });
 };
-if(open || close_settings){
+if (open || close_settings) {
     open.addEventListener('click', () => {
         settings_container.classList.add('popup');
         rules_container.classList.add('hidden');
@@ -433,10 +424,10 @@ $('#updateBtn').addEventListener('click', () => {
     // console.log("name " +$('#updateName').value + " email " + $('#updateEmail').value+ " " + $('#username').innerText);
     const data = {
         username: $('#username').innerText,
-        name: $('#updateName').value, 
+        name: $('#updateName').value,
         email: $('#updateEmail').value
     };
-    
+
     fetch(`http://localhost:3000/users/${$('#username').innerText}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -445,12 +436,11 @@ $('#updateBtn').addEventListener('click', () => {
         .then((doc) => {
             if (doc.error)
                 showError(doc.error);
-            else
-                {
+            else {
                 $('#name').innerText = doc.user;
                 alert("Your name and email have been updated.");
                 location.reload();
-                }
+            }
         })
         .catch(err => showError('ERROR: ' + err))
 });
@@ -461,25 +451,25 @@ $('#deleteBtn').addEventListener('click', () => {
         return;
 
     const username = $('#username').innerText;
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
 
     fetch(`http://localhost:3000/users/${username}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
+            'Authorization': `Bearer ${token}`
         }
     })
-    .then((r) => r.json())
-    .then((doc) => {
-        if (doc.error) {
-            showError(doc.error);
-        } else {
-            localStorage.removeItem('token');
-            window.location.href = "/index.html";
-        }
-    })
-    .catch(err => showError('ERROR: ' + err))
+        .then((r) => r.json())
+        .then((doc) => {
+            if (doc.error) {
+                showError(doc.error);
+            } else {
+                localStorage.removeItem('token');
+                window.location.href = "/index.html";
+            }
+        })
+        .catch(err => showError('ERROR: ' + err))
 });
 
 
@@ -493,21 +483,21 @@ $('#logoutLink').addEventListener('click', () => {
             'Content-Type': 'application/json',
         }
     })
-    .then(response => {
-        if (response.ok) {
-            rules_container.classList.remove('popup');
-            root.classList.remove('blured');
-            localStorage.removeItem('token');
-            window.location.href = "/index.html";
-            
+        .then(response => {
+            if (response.ok) {
+                rules_container.classList.remove('popup');
+                root.classList.remove('blured');
+                localStorage.removeItem('token');
+                window.location.href = "/index.html";
 
-        } else {
-            response.json().then(data => {
-                showError('ERROR: ' + data.error);
-            });
-        }
-    })
-    .catch(err => showError('ERROR: ' + err));
+
+            } else {
+                response.json().then(data => {
+                    showError('ERROR: ' + data.error);
+                });
+            }
+        })
+        .catch(err => showError('ERROR: ' + err));
 });
 
 
