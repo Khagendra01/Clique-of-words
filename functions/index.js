@@ -27,13 +27,7 @@ const cors = require("cors");
 // init app and db
 const app = express();
 // init database url
-
 const secretKey = process.env.SECRET_KEY;
-
-
-
-// firebase admin init
-// admin.initializeApp();
 
 // Connect to the database
 const getDatabase = async () => {
