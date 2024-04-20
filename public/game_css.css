@@ -34,7 +34,7 @@ button:focus {
   left: 0;
   bottom: 0;
   right: 0;
-  background: #e0ded9;
+  background: #fbf7ec;
   padding: 10px;
   display: inline;
   transition: 0.3s;
@@ -80,6 +80,7 @@ button:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   overflow: unset;
   min-width: 520px;
 }
@@ -91,7 +92,6 @@ button:focus {
   border: 0;
   color: black;
   position: relative;
-  left: 3%;
   text-align: center;
   font-size: 30px;
 }
@@ -101,35 +101,35 @@ button:focus {
 }
 
 .root .main-container .game-container .row {
-  height: 5%;
-  flex: 25%;
+  height: 4%;
+  flex: 20%;
   padding: 0 -20px;
   min-width: 0%;
-  margin: 0 2px 2px 2px;
+  margin: 2px 2px 2px 2px;
   /* TODO: change  inline-flex*/
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  align-items: center;
   justify-content: center;
   transition: all 1s ease-in-out;
-  transform: scale(0.8);
 }
 .root .main-container .game-container .guessed_row {
-  
+
   text-align: center;
+  width: 100%;
   border: 0;
   color: #cb4747;
   border-radius: 10px;
-  flex: 20%;
+  flex: 25%;
   padding: 0px;
   min-width: 10%;
-  width: calc(100% - 120px);
-  margin: 2px 2px 0px 2px;
+  max-width: 500px;
+  margin: 1px 2px;
   position: relative;
-  left: 13%;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   height: fit-content;
-  flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
   overflow: hidden;  /* Hide the content when the element's height is 0 */
@@ -178,19 +178,19 @@ button:focus {
 /* Class to control visibility */
 .visible {
   opacity: 1 !important;
-  max-height: 500px !important;
+  max-height: 100px !important;
   transition: opacity 1s, visibility 1s, max-height 1s ease-in-out !important;
   height: 10px !important;
 }
 
 
 .root .main-container .game-container .row .letter {
-  margin-left: 20px;
+  margin: 2px;
   vertical-align: middle;
-  width: 100%;
+  width: 90%;
   height: 80px;
   /* border: 10px solid green; */
-  background-color: #2a2b39;
+  background-color: rgba(41, 28, 79, 0.9);
   border: 0;
   display: flex;
   align-items: center;
@@ -205,7 +205,7 @@ button:focus {
 }
 
 .root .main-container .game-container .row .letter input {
-  width: 120px;
+  width: 118px;
   height: 60px;
   color: #ffffff;
   font-size: 40px;
@@ -245,7 +245,6 @@ button:focus {
 
 .root .main-container .game-container .game_info {
   position: relative;
-  left: 2%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -501,7 +500,7 @@ button:focus {
   width: 30px;
   position: absolute;
   top: 5px;
-  stroke: black;
+  stroke: rgb(37, 26, 67);
   margin-bottom: 5px;
 }
 

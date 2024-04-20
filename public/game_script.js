@@ -27,6 +27,10 @@ var array_of_words;
 var in_level = 0;
 const level = 1;
 var categories = {};
+var categorySelectedWords = {};
+var categoryRowNumber = {};
+var shuffledWords = [];  // Global declaration
+
 
 // life balls
 const life1 = document.getElementById('life_1');
@@ -71,26 +75,29 @@ document.addEventListener('DOMContentLoaded', () => {
       const letters = document.querySelectorAll('#game_container .letter');
 
 
-        shuffle_words.addEventListener('click', () => {
-
-        /**
-         * Represents a collection of letter input elements.
-         * @type {NodeListOf<HTMLInputElement>}
-         */
-        const letterInputs = document.querySelectorAll('#game_container .letter input');
-        const currentWords = Array.from(letterInputs, input => input.placeholder);
-        
+      shuffle_words.addEventListener('click', () => {
+        // Select only the letter inputs in rows that are not hidden
+        const visibleLetterInputs = Array.from(document.querySelectorAll('#game_container .row'))
+                                         .filter(row => row.style.display !== 'none') // Filter out rows that are hidden
+                                         .flatMap(row => Array.from(row.querySelectorAll('.letter input'))); // Get inputs from visible rows
+    
+        // Extract the current words from these inputs
+        const currentWords = visibleLetterInputs.map(input => input.placeholder);
+    
         // Shuffle the current words
-        const shuffledWords = shuffleArray(currentWords);
-      
-        // Re-assign the shuffled words to the input placeholders
-        letterInputs.forEach((input, index) => {
+        shuffledWords = shuffleArray(currentWords);
+    
+        // Re-assign the shuffled words to the input placeholders of visible rows only
+        visibleLetterInputs.forEach((input, index) => {
           input.placeholder = shuffledWords[index];
         });
-        letters.forEach(letter => {
+    
+        // Deselect all selected letters in visible rows
+        visibleLetterInputs.forEach(letter => {
             letter.classList.remove('selected');
         });
-      });
+    });
+    
 
 
   
@@ -145,27 +152,27 @@ function toggleVisibilityById(element) {
  */
 function checkSelectedWords() {
     const selectedInputs = document.querySelectorAll('#game_container .letter.selected input');
-    const categoryCounts = {};  // Initialize an object to count categories
+    const categoryCounts = {};
     let maxWordsInCategory = 0;
-
-    toggleVisibilityById(guessed_row4);
-    toggleVisibilityById(guessed_row1);
+    let successfulCategory = null;
 
     // Count categories for selected words
     selectedInputs.forEach(input => {
-        const inputText = input.placeholder.toUpperCase();  // Get the placeholder text in uppercase
+        const inputText = input.placeholder.toUpperCase();
         let found = false;
 
         Object.keys(categories).forEach(category => {
             if (categories[category].includes(inputText)) {
                 if (!categoryCounts[category]) {
-                    categoryCounts[category] = 0;
+                    categoryCounts[category] = 1;
+                } else {
+                    categoryCounts[category]++;
                 }
-                categoryCounts[category]++;
                 found = true;
 
                 if (categoryCounts[category] > maxWordsInCategory) {
                     maxWordsInCategory = categoryCounts[category];
+                    successfulCategory = categoryCounts[category] === 4 ? category : null;
                 }
             }
         });
@@ -174,42 +181,74 @@ function checkSelectedWords() {
             console.log(`Word: ${inputText} does not belong to any known category.`);
         }
     });
-    Object.keys(categoryCounts).forEach(category => {
-        categorySelectedWords[category] += categoryCounts[category];
-    });
 
-    console.log(categorySelectedWords);
-    
-    let foundFour = false;
-    // Check if any category has 4 or more words
-    Object.keys(categorySelectedWords).forEach(category => {
-        if (categorySelectedWords[category] === 3) {
-            console.log(`Almost there! You have found 3 words for the category: ${category}`);
+    // Use the stored row number to determine which row to hide
+    if (successfulCategory && maxWordsInCategory === 4) {
+        // Retrieve the row number from categoryRowNumber mapping
+        const rowNumber = categoryRowNumber[successfulCategory];
+        if (rowNumber) {
+            hideRowAndReshuffle(rowNumber);  // Pass the row number directly
+        } else {
+            console.log("No row number found for the successful category.");
         }
-        if (categorySelectedWords[category] >= 4) {
-            console.log(`You've found a category with four or more words: ${category}`);
-            foundFour = true;
-        }
-    });
-    if (!foundFour && maxWordsInCategory < 4) {
-        const letters = document.querySelectorAll('#game_container .letter');
-        letters.forEach(letter => {
-            letter.classList.remove('selected');
-        });
-        console.log("No category has four matching words yet. Selections cleared.");
-    }   else {
-        
-
+    } else {
+        console.log("Keep trying or check for errors in selected words.");
     }
+}
+function hideRowAndReshuffle(rowNumber) {
+    let rowToHide = document.getElementById(`row${rowNumber}`);
+    let guessedRowToShow = document.getElementById(`guessed_row${rowNumber}`);  // Corresponding guessed row
 
-    // Resetting counts for the next check
-    Object.keys(categorySelectedWords).forEach(category => {
-        categorySelectedWords[category] = 0;
+    if (rowToHide && guessedRowToShow) {
+        rowToHide.style.display = 'none';  // Hide the row
+
+        // Add .visible class to make the guessed row appear
+        guessedRowToShow.classList.add('visible');
+
+        // Remove words from shuffledWords and categories
+        Object.keys(categories).forEach(category => {
+            if (categoryRowNumber[category] == rowNumber) {
+                categories[category].forEach(word => {
+                    let index = shuffledWords.indexOf(word.toUpperCase());
+                    if (index !== -1) {
+                        shuffledWords.splice(index, 1); // Remove word from shuffledWords
+                    }
+                });
+            }
+        });
+
+        reshuffleAndReassignWords();  // Reshuffle and reassign words to remaining visible rows
+    } else {
+        console.log("No row found to hide or no guessed row to show for row number:", rowNumber);
+    }
+}
+
+// Function to reshuffle and reassign words to visible rows
+function reshuffleAndReassignWords() {
+    const letters = document.querySelectorAll('#game_container .letter');
+    letters.forEach(letter => {
+        letter.classList.remove('selected');
+    });
+    const remainingRows = Array.from(document.querySelectorAll('.row')).filter(row => row.style.display !== 'none');
+    shuffledWords = shuffleArray(shuffledWords.slice());  // Shuffle a copy of shuffledWords
+
+    let index = 0; // Track index across all rows
+    remainingRows.forEach(row => {
+        const letterInputs = row.querySelectorAll('.letter input');
+        letterInputs.forEach((input) => {
+            if (index < shuffledWords.length) {
+                input.placeholder = shuffledWords[index++];
+            } else {
+                input.placeholder = ""; // Clear placeholder if no words left
+            }
+        });
     });
 }
-var categorySelectedWords = {};
-function fetchDatabase(level) {
 
+
+
+
+function fetchDatabase(level) {
     fetch(`http://localhost:3000/placeholders/${level}`)
     .then((response) => {
         if (!response.ok) {
@@ -219,43 +258,50 @@ function fetchDatabase(level) {
     })
     .then((data) => {
         categories = {};  // Initialize categories anew
-    
+        categorySelectedWords = {};
+        categoryRowNumber = {};
+
         data.forEach(item => {
-            categories[item.categoryName] = item.words.map(word => word.toUpperCase());  // Ensure words are in uppercase for consistent comparison
+            categories[item.categoryName] = item.words.map(word => word.toUpperCase());
             categorySelectedWords[item.categoryName] = 0;
-            console.log('Category:', item.categoryName, 'Words:', item.words);
+            categoryRowNumber[item.categoryName] = item.row;
         });
-    
-        console.log(categories);
-        setupGame(categories);  // Proceed to set up the game
+
+        setupGame(categories, data);  // Pass the categories and raw data to setupGame
     })
     .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
     });
 }
 
-function setupGame(categories) {
+function setupGame(categories, data) {
+    // Setup guessed rows
+    data.forEach(item => {
+        const guessedRow = document.getElementById(`guessed_row${item.row}`);
+        if (guessedRow) {
+            guessedRow.querySelector('h2').textContent = item.categoryName;
+            guessedRow.querySelector('p').textContent = item.words.join(', ');
+        }
+    });
+
+    // Shuffle and assign words to letter inputs
     const allWords = Object.values(categories).flat();
-  
-    // Shuffle the array to randomize the order of words
-    const shuffledWords = shuffleArray(allWords);
+    shuffledWords = shuffleArray(allWords);
     const letterInputs = document.querySelectorAll('#game_container .letter input');
 
-  // Assign the shuffled words to the input placeholders
-  letterInputs.forEach((input, index) => {
-    input.placeholder = shuffledWords[index] || ""; // Use an empty string if there are not enough words
-  });
+    letterInputs.forEach((input, index) => {
+        input.placeholder = shuffledWords[index] || ""; // Use an empty string if there are not enough words
+    });
 }
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
-        // Random index from 0 to i
         const j = Math.floor(Math.random() * (i + 1));
-        // Swap elements array[i] and array[j]
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
 }
+
 
 // fetch with authentication
 function getUserInformation() {

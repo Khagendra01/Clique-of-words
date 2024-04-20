@@ -85,7 +85,8 @@ app.get('/placeholders/:level', async (req, res) => {
     
     const result = docs.map(doc => ({
       categoryName: doc.categoryName,  
-      words: doc.words
+      words: doc.words,
+      row: doc.row
     }));
 
     res.send(result);
