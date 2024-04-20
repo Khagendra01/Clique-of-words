@@ -57,7 +57,26 @@
                             <div class="game-container-heading">
                                 <p>Find the clique of words!</p>
                             </div>
-                            <div class="row" id="row1">
+                            
+                            <div class="guessed_row" id="guessed_row1">
+                                <div class="guessd_row_heading">
+                                    <h2 id="guessd_row_heading_h2">Programming Languages</h2>
+                                    <p id="guessd_row_heading_p">Scala, Java, Swift, Ruby</p>
+                                </div>
+                            </div>
+                            <div class="guessed_row" id="guessed_row2">
+                                <h2 id="guessd_row_heading_h2">Predatory Animals Words</h2>
+                                <p id="guessd_row_heading_p">Pyhton, Falcon, Cheetah, Wolf</p>
+                            </div>
+                            <div class="guessed_row" id="guessed_row3">
+                                <h2 id="guessd_row_heading_h2">Gems</h2>
+                                <p id="guessd_row_heading_p">Opal, Ruby, Sapphire, Topaz</p>
+                            </div>
+                            <div class="guessed_row" id="guessed_row4">
+                                <h2 id="guessd_row_heading_h2">Colors</h2>
+                                <p id="guessd_row_heading_p">Red, Blue, Green, Yellow</p>
+                            </div>
+                            <div class="row" id="row1" style="display: none;">
                                 <div class="letter">
                                     <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
                                         readonly placeholder="Word">
@@ -76,7 +95,7 @@
                                 </div>
 
                             </div>
-                            <div class="row" id="row2">
+                            <div class="row" id="row2" style="display: none;">
                                 <div class="letter">
                                     <input oninput="this.value = this.value.toUpperCase()" type="text" name="field"
                                         readonly placeholder="Word">

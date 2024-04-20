@@ -70,7 +70,7 @@ button:focus {
   margin-right: 20px;
 }
 
-.game-container {
+.root .main-container .game-container {
   /* background-color: rgb(62, 62, 62); */
   width: 50%;
   height: auto;
@@ -86,31 +86,109 @@ button:focus {
 
 .root .main-container .game-container .game-container-heading {
   display: block;
-  margin: 20px 20px 20px 0px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px;
   border: 0;
   color: black;
   position: relative;
+  left: 3%;
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
+}
+.root .main-container .game-container .game-container-heading p{
+  padding: 0px;
+  margin: 10px 0px;
 }
 
 .root .main-container .game-container .row {
+  height: 5%;
   flex: 25%;
   padding: 0 -20px;
-  min-width: 10%;
-  margin: -20px;
+  min-width: 0%;
+  margin: 0 2px 2px 2px;
+  /* TODO: change  inline-flex*/
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
-  transition: all 0.3s ease-in-out;
+  transition: all 1s ease-in-out;
+  transform: scale(0.8);
 }
+.root .main-container .game-container .guessed_row {
+  
+  text-align: center;
+  border: 0;
+  color: #cb4747;
+  border-radius: 10px;
+  flex: 20%;
+  padding: 0px;
+  min-width: 10%;
+  width: calc(100% - 120px);
+  margin: 2px 2px 0px 2px;
+  position: relative;
+  left: 13%;
+  display: inline-block;
+  height: fit-content;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  overflow: hidden;  /* Hide the content when the element's height is 0 */
+  transition: opacity 1s, visibility 1s, max-height 1s ease-in-out;
+  opacity: 0;
+  max-height: 0; /* Start with no height */
+}
+
+.root .main-container .game-container .guessed_row .guessed_row_heading{
+  position: relative;
+  top: -10%;
+}
+.root .main-container .game-container .guessed_row h2
+{
+  text-transform: uppercase;
+  font-size: 15px;
+  margin: 10px 0px;
+  color: #130b0b;
+  font-weight: 600;
+}
+.root .main-container .game-container .guessed_row p
+{
+  font-size: 12px;
+  margin: 10px 0px;
+  text-transform: uppercase;
+  color: #f3f3f3;
+}
+
+/* Specific IDs with custom background colors */
+.root .main-container .game-container #guessed_row1 {
+  background-color: rgb(38, 187, 38);
+}
+
+.root .main-container .game-container #guessed_row2 {
+  background-color: rgb(171, 165, 50);
+}
+
+.root .main-container .game-container #guessed_row3 {
+  background-color: rgb(50, 84, 171);
+}
+
+.root .main-container .game-container #guessed_row4 {
+  background-color: rgb(178, 74, 199);
+}
+
+/* Class to control visibility */
+.visible {
+  opacity: 1 !important;
+  max-height: 500px !important;
+  transition: opacity 1s, visibility 1s, max-height 1s ease-in-out !important;
+  height: 10px !important;
+}
+
 
 .root .main-container .game-container .row .letter {
   margin-left: 20px;
   vertical-align: middle;
   width: 100%;
-  height: 90px;
+  height: 80px;
   /* border: 10px solid green; */
   background-color: #2a2b39;
   border: 0;
@@ -119,7 +197,7 @@ button:focus {
   justify-content: center;
   border-radius: 5%;
   box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
-  transition: transform 0.3s ease;
+  transition: transform 1s ease;
 }
 
 .root .main-container .game-container .row .letter.push-down {
@@ -529,17 +607,33 @@ input:checked~label~* {
   pointer-events: none;
 }
 
-/* Small screens (less than 640px) */
+/* med */
 @media only screen and (min-width: 641px)and (max-width: 1007px) {
 
   .rules_container,
   .settings_container {
     transform: scale(0.7) translate(-70%, -70%);
   }
+  .root .main-container .game-container {
+    top: -10%;
+    transform: scale(0.8);
+    height: 120%;
+  }
+  .letter{
+    transform: scale(1);
+  }
 }
 
-/* Medium screens (641px to 1007px) */
+/* small */
 @media only screen and (max-width: 640px) {
+  .guessed_row{
+    transform: scale(0.8);
+
+  }
+  .guessed_row p{
+    font-size: 15px;
+  }
+  
   .rules_container.popup #playGame {
     position: relative;
     left: 32%;
@@ -575,10 +669,12 @@ input:checked~label~* {
     border: 2px solid rgb(25, 21, 21);
     border-radius: 2rem;
     box-shadow: -1px 0px 17px 6px rgb(19 17 17);
-    overflow: scroll;
+    overflow: hidden;
     scrollbar-width: thin;
   }
-
+  #playGame {
+    top: -5%;
+  }
   label {
     right: 20px;
   }
@@ -589,7 +685,8 @@ input:checked~label~* {
 
   .game-container {
     transform: scale(0.7);
-    top: -5%;
+    height: 120%;
+    top: -15%;
   }
 
   ::-webkit-scrollbar {

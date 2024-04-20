@@ -16,6 +16,10 @@ const checkbox = document.getElementById('darkmode-toggle');
 const gameHeading = document.querySelector('.game-container-heading');
 const lifeLine = document.querySelector('.life_line');
 const shuffle_words = document.getElementById('shuffle_words');
+const guessed_row1 = document.getElementById('guessed_row1');
+const guessed_row2 = document.getElementById('guessed_row2');
+const guessed_row3 = document.getElementById('guessed_row3');
+const guessed_row4 = document.getElementById('guessed_row4');
 const words_level = 0;
 var correct_position = []
 var correct_letter = []
@@ -122,6 +126,13 @@ function updateSelection(letter) {
         letter.classList.toggle('selected');
     }
 }
+function toggleVisibilityById(element) {
+    if (element.classList.contains('visible')) {
+        element.classList.remove('visible');
+    } else {
+        element.classList.add('visible');
+    }
+}
 /**
  * Checks the selected words and counts the categories they belong to.
  * Notifies the user if they have found a category with four or more words.
@@ -135,6 +146,10 @@ function updateSelection(letter) {
 function checkSelectedWords() {
     const selectedInputs = document.querySelectorAll('#game_container .letter.selected input');
     const categoryCounts = {};  // Initialize an object to count categories
+    let maxWordsInCategory = 0;
+
+    toggleVisibilityById(guessed_row4);
+    toggleVisibilityById(guessed_row1);
 
     // Count categories for selected words
     selectedInputs.forEach(input => {
@@ -144,10 +159,14 @@ function checkSelectedWords() {
         Object.keys(categories).forEach(category => {
             if (categories[category].includes(inputText)) {
                 if (!categoryCounts[category]) {
-                    categoryCounts[category] = 0;  // Initialize if not already
+                    categoryCounts[category] = 0;
                 }
-                categoryCounts[category]++;  // Increment the count for this category
+                categoryCounts[category]++;
                 found = true;
+
+                if (categoryCounts[category] > maxWordsInCategory) {
+                    maxWordsInCategory = categoryCounts[category];
+                }
             }
         });
 
@@ -155,37 +174,40 @@ function checkSelectedWords() {
             console.log(`Word: ${inputText} does not belong to any known category.`);
         }
     });
-
-    // Check if any category has 4 or more words
-    let win = false;
-    let almostWin = false
     Object.keys(categoryCounts).forEach(category => {
-        if (categoryCounts[category] >= 4) {
-            swal({
-                title: "You've found category!",
-                text:  category,
-                icon: "success",
-            });
-            console.log(`You won! Four words belong to the category: ${category}`);
-            win = true;
-        }
-        if (categoryCounts[category] = 3 && !win) {
-            swal({
-                title: "Almost there!",
-                text: "You have found 3 word for 1 category!",
-                icon: "warning",
-                dangerMode: true,
-            });
-            console.log(`1 more to go the category: ${category}`);
-            almostWin = true;
-        }
+        categorySelectedWords[category] += categoryCounts[category];
     });
 
-    if (!win && !almostWin && selectedInputs.length > 0) {  // Check if there were any selections at all
-        console.log("Keep trying! No category has four matching words yet.");
-    }
-}
+    console.log(categorySelectedWords);
+    
+    let foundFour = false;
+    // Check if any category has 4 or more words
+    Object.keys(categorySelectedWords).forEach(category => {
+        if (categorySelectedWords[category] === 3) {
+            console.log(`Almost there! You have found 3 words for the category: ${category}`);
+        }
+        if (categorySelectedWords[category] >= 4) {
+            console.log(`You've found a category with four or more words: ${category}`);
+            foundFour = true;
+        }
+    });
+    if (!foundFour && maxWordsInCategory < 4) {
+        const letters = document.querySelectorAll('#game_container .letter');
+        letters.forEach(letter => {
+            letter.classList.remove('selected');
+        });
+        console.log("No category has four matching words yet. Selections cleared.");
+    }   else {
+        
 
+    }
+
+    // Resetting counts for the next check
+    Object.keys(categorySelectedWords).forEach(category => {
+        categorySelectedWords[category] = 0;
+    });
+}
+var categorySelectedWords = {};
 function fetchDatabase(level) {
 
     fetch(`http://localhost:3000/placeholders/${level}`)
@@ -200,6 +222,7 @@ function fetchDatabase(level) {
     
         data.forEach(item => {
             categories[item.categoryName] = item.words.map(word => word.toUpperCase());  // Ensure words are in uppercase for consistent comparison
+            categorySelectedWords[item.categoryName] = 0;
             console.log('Category:', item.categoryName, 'Words:', item.words);
         });
     
