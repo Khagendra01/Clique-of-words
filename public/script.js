@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
           showError(doc.error);
           
         } else {
-         
           openHomeScreen(doc);
         }
         console.log(data);
@@ -102,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function openHomeScreen(doc) {
     const token = doc.auth;
     localStorage.setItem('token', token);
+    localStorage.setItem('currentLevel', 1);
     window.location.href = "/game.html";
   }
 
