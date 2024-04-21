@@ -264,9 +264,6 @@ button:focus {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.root .main-container .game-container .game_info .next_level{
-   display: none;
-}
 
 .root .main-container .game-container .game_info .life_line {
   display: inline-flex;
@@ -418,7 +415,7 @@ button:focus {
 
 .settings_container button,
 .rules_container.popup #playGame,
-.root .main-container .game-container .game_info .game_info_buttons button, .root .main-container .game-container .game_info button {
+.root .main-container .game-container .game_info .game_info_buttons button {
   background-color: #2a2b39;
   color: #ffffff;
   border: 0;

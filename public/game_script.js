@@ -255,9 +255,6 @@ function checkSelectedWords() {
   // Use the stored row number to determine which row to hide
   if (successfulCategory && maxWordsInCategory === 4) {
     categoriesGuessedCorrectly++;
-    if (categoriesGuessedCorrectly === 3) {
-        next_level_button.style.display = "block";
-    }
     const rowNumber = categoryRowNumber[successfulCategory];
     if (rowNumber) {
       hideRowAndReshuffle(rowNumber); // Pass the row number directly
