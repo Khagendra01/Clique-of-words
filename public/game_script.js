@@ -227,7 +227,7 @@ function checkSelectedWords() {
             setTimeout(restart_the_game, 500); // Restart the game after a 2000ms delay
         });
     } else {
-        if (hiddenLifeBalls.length < 4) {
+        if (!successfulCategory && hiddenLifeBalls.length < 4) {
             lifeBalls[hiddenLifeBalls.length].style.display = 'none';
         }
     }
