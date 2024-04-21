@@ -11,8 +11,6 @@ button:focus {
   outline: none;
 }
 
-
-
 .w {
   font-family: "Lobster", sans-serif;
   font-size: 60px;
@@ -56,7 +54,6 @@ button:focus {
 
 /* main container*/
 .root .main-container {
-
   position: absolute;
   top: 10%;
   height: 80%;
@@ -117,7 +114,6 @@ button:focus {
 }
 
 .root .main-container .game-container .guessed_row {
-
   text-align: center;
   width: 100%;
   border: 0;
@@ -187,7 +183,6 @@ button:focus {
   height: 10px !important;
 }
 
-
 .root .main-container .game-container .row .letter {
   margin: 2px;
   vertical-align: middle;
@@ -217,7 +212,6 @@ button:focus {
   background: transparent;
   border: none;
   outline: none;
-
 }
 
 .root .main-container .game-container .row .selected {
@@ -227,7 +221,21 @@ button:focus {
   border: none;
   outline: none;
 }
+@keyframes shake {
+  0%, 100% {
+      transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+      transform: translateX(-10px);
+  }
+  20%, 40%, 60%, 80% {
+      transform: translateX(10px);
+  }
+}
 
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
 
 .root .main-container .game-container .row .letter input::placeholder {
   font-size: 15px;
@@ -272,13 +280,15 @@ button:focus {
   align-items: center;
   justify-content: space-evenly;
 }
+#life_1, #life_2, #life_3, #life_4 {
+  display: inline;
+}
 
 .root .main-container .game-container .game_info .game_info_buttons {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   margin-top: 20px;
-
 }
 
 .root .main-container .game-container .game_info p {
@@ -293,9 +303,7 @@ button:focus {
   margin-left: 10px;
   border-radius: 50%;
   background-color: rgb(116, 102, 102);
-
 }
-
 
 /* .root .option-container button {
   margin: 1px;
@@ -323,7 +331,8 @@ button:focus {
   transform: translate(-50%, -50%);
   width: 800px;
   height: 700px;
-  background: radial-gradient(circle 800px at 75% 45%, #ade2ee 10%, #eddfc2) fixed;
+  background: radial-gradient(circle 800px at 75% 45%, #ade2ee 10%, #eddfc2)
+    fixed;
   padding: 30px;
   border: 2px solid black;
   border-radius: 2rem;
@@ -353,7 +362,6 @@ button:focus {
     "info-update-button info-update-button info-update-button"
     "info-update-button info-update-button info-update-button";
 }
-
 
 .info-update-buttons {
   grid-area: info-update-button;
@@ -563,11 +571,11 @@ label:after {
   width: 0;
 }
 
-input:checked+label {
+input:checked + label {
   background: #242424;
 }
 
-input:checked+label:after {
+input:checked + label:after {
   left: 54px;
   transform: translateX(-100%);
   background: linear-gradient(180deg, #777, #3a3a3a);
@@ -577,17 +585,17 @@ label:active:after {
   width: 29px;
 }
 
-input:checked~label~.root {
+input:checked ~ label ~ .root {
   background: #143e61;
 }
 
-input:checked~label~.rules_container,
-input:checked~label~.settings_container {
+input:checked ~ label ~ .rules_container,
+input:checked ~ label ~ .settings_container {
   color: #fff;
   background: #0d0e0f;
 }
 
-input:checked~label~* {
+input:checked ~ label ~ * {
   color: #fff !important;
   stroke: white;
   fill: white;
@@ -611,8 +619,7 @@ input:checked~label~* {
 }
 
 /* med */
-@media only screen and (min-width: 641px)and (max-width: 1007px) {
-
+@media only screen and (min-width: 641px) and (max-width: 1007px) {
   .rules_container,
   .settings_container {
     transform: scale(0.7) translate(-70%, -70%);
@@ -633,7 +640,6 @@ input:checked~label~* {
 @media only screen and (max-width: 640px) {
   .guessed_row {
     transform: scale(0.8);
-
   }
 
   .guessed_row p {
@@ -736,7 +742,6 @@ input:checked~label~* {
     margin-bottom: 20px;
     color: #fff;
   }
-
 
   .user-information h2 {
     left: 0%;

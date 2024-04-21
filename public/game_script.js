@@ -71,7 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    check_selections.addEventListener('click', checkSelectedWords);
+    check_selections.addEventListener('click', function() {
+        const selectedInputs = document.querySelectorAll('#game_container .letter.selected input');
+    
+        if (selectedInputs.length !== 4) {
+            swal({
+                title: "Warning!",
+                text: "You must select exactly 4 words before checking.",
+                icon: "warning",
+                dangerMode: true,
+            });
+        } else {
+            checkSelectedWords(); 
+        }
+    });
 
     const letters = document.querySelectorAll('#game_container .letter');
 
@@ -151,7 +164,7 @@ function checkSelectedWords() {
     let maxWordsInCategory = 0;
     let successfulCategory = null;
 
-    //count categories for selected words
+    // Count categories for selected words
     selectedInputs.forEach(input => {
         const inputText = input.placeholder.toUpperCase();
         let found = false;
@@ -177,9 +190,50 @@ function checkSelectedWords() {
         }
     });
 
-    //use the stored row number to determine which row to hide
+    // Handle case where exactly three words are guessed correctly
+    Object.keys(categoryCounts).forEach(category => {
+        if (categoryCounts[category] === 3) {
+            swal({
+                title: "Almost there!",
+                text: `You're just one word away from completing one category`,
+                icon: "warning",
+                dangerMode: true,
+            });
+        }
+    });
+    if (maxWordsInCategory < 4) {
+        // Shake all displayed letters and clear selection if the selected category words are less than four
+        document.querySelectorAll('#game_container .letter input').forEach(input => {
+            input.parentElement.classList.add('shake');
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll('#game_container .letter').forEach(letter => {
+                letter.classList.remove('selected', 'shake');
+            });
+        }, 300); 
+    }
+    // Check if all lifeline balls are hidden
+    const lifeBalls = [life1, life2, life3, life4];
+    const hiddenLifeBalls = lifeBalls.filter(ball => ball.style.display === 'none');
+
+    if (hiddenLifeBalls.length === 4) {
+        swal({
+            title: "Game Over",
+            text: "You've lost the game. Better luck next time!",
+            icon: "error",
+            dangerMode: true,
+        }).then(() => {  // Using then() to wait for the swal to close
+            setTimeout(restart_the_game, 500); // Restart the game after a 2000ms delay
+        });
+    } else {
+        if (hiddenLifeBalls.length < 4) {
+            lifeBalls[hiddenLifeBalls.length].style.display = 'none';
+        }
+    }
+
+    // Use the stored row number to determine which row to hide
     if (successfulCategory && maxWordsInCategory === 4) {
-        //retrieve the row number from categoryRowNumber mapping
         const rowNumber = categoryRowNumber[successfulCategory];
         if (rowNumber) {
             hideRowAndReshuffle(rowNumber);  // Pass the row number directly
@@ -190,6 +244,7 @@ function checkSelectedWords() {
         console.log("Keep trying or check for errors in selected words.");
     }
 }
+
 
 
 /**
