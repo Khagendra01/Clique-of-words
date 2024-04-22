@@ -51,8 +51,11 @@ div {
     color: red;
 }
 
-#error {
-    font-size: 80%
+.error {
+    display: block;
+    font-size: 80%;
+    color: red;
+    height: fit-content;
 }
 
 .form {

@@ -660,7 +660,8 @@ $("#logoutLink").addEventListener("click", () => {
  * @param {string} err - The error message to display.
  */
 function showError(err) {
-  $("#error").innerText = err;
+  $(".error").innerText = err;
+  
 }
 
 /**

@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginPassword = $("#loginPassword").value;
 
     if (!loginUsername || !loginPassword) {
-      showError("Username and password are required.");
+      showError("Username and password are required.", $("#loginError"));
       return;
     }
 
@@ -60,16 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.json())
     .then((doc) => {
       if (doc.error) {
-        showError(doc.error);
+        showError(doc.error, $("#loginError"));
       } else {
         openHomeScreen(doc);
       }
     })
-    .catch((err) => showError("ERROR: " + err));
+    .catch((err) => showError("ERROR: " + err, $("#loginError")));
   });
 
   // Register button action
-  $("#registerBtn").addEventListener("click", () => {
+  $("#registerBtn").addEventListener("click", (event) => {
     event.preventDefault();
     const registerUsername = $("#registerUsername").value;
     const registerPassword = $("#registerPassword").value;
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const registerEmail = $("#registerEmail").value;
 
     if (!registerUsername || !registerPassword || !registerName || !registerEmail) {
-      showError("All fields are required.");
+      showError("All fields are required." , $("#registerError"));
       return;
     }
     if (!$("#registerPassword").checkValidity()) {
@@ -100,17 +100,19 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.json())
     .then((doc) => {
       if (doc.error) {
-        showError(doc.error);
+        showError(doc.error, $("#registerError"));
       } else {
         openHomeScreen(doc);
       }
     })
-    .catch((err) => showError("ERROR: " + err));
+    .catch((err) => showError("ERROR: " + err, $("#registerError")));
   });
 
-  function showError(err) {
-    $("#error").innerText = err;
-  }
+  function showError(err, errorElement) {
+    const errorDiv = errorElement || $(".error"); 
+    errorDiv.innerText = err;
+}
+
 
   function resetInputs() {
     document.querySelectorAll("input").forEach(input => input.value = "");
@@ -129,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginScreen && registerScreen) {
       registerScreen.classList.add("hidden");
       resetInputs();
-      showError("");
+      showError("", $("#registerError"));
       loginScreen.classList.remove("hidden");
     }
   }
@@ -149,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (registerScreen) {
       resetInputs();
-      showError("");
+      showError("", $("#registerError"));
       registerScreen.classList.remove("hidden");
     }
   }
@@ -175,8 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
     criteriaListItems[3].classList.toggle('invalid', !isLongEnough);  // Length
   
     // If any criteria are not met, show the error message container
-    var showError = !hasLowercase || !hasUppercase || !hasNumber || !isLongEnough;
-    document.getElementById('passwordError').classList.toggle('show', showError);
+    var showError_toggle = !hasLowercase || !hasUppercase || !hasNumber || !isLongEnough;
+    document.getElementById('passwordError').classList.toggle('show', showError_toggle);
   }
   
 
