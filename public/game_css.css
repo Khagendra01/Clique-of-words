@@ -33,7 +33,7 @@ button:focus {
   left: 0;
   bottom: 0;
   right: 0;
-  background: #fbf7ec;
+  background: #e3dbf0;
   padding: 10px;
   display: inline;
   transition: 0.3s;
@@ -332,8 +332,7 @@ button:focus {
   transform: translate(-50%, -50%);
   width: 800px;
   height: 700px;
-  background: radial-gradient(circle 800px at 75% 45%, #ade2ee 10%, #eddfc2)
-    fixed;
+  background: radial-gradient(circle 800px at 30% 70%, #9badee 30%, #eac3ac) fixed; 
   padding: 30px;
   border: 2px solid black;
   border-radius: 2rem;

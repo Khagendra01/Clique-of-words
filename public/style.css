@@ -11,10 +11,11 @@ body {
     width: 100%;
     font-family: monospace;
     font-size: 18pt;
-    background: radial-gradient(circle 800px at 75% 45%, #ADE2EE 20%, #EDDFC2) fixed;
+    background: radial-gradient(circle 800px at 30% 70%, #9badee 30%, #eac3ac) fixed; 
     background-position: center center;
     background-repeat: repeat;
     background-attachment: fixed;
+    /* #b0eba8 */
   }
   .error-message.show p{
     padding: 2px;
@@ -31,6 +32,7 @@ div {
     border-radius: 2em;
     border: solid 1px gray;
     padding: 1em;
+    
 }
 
 .hidden {
@@ -80,9 +82,11 @@ div {
     transform: translate(-50%, -50%);
     margin: 0 auto;
     padding: 20px;
+    border:none;
     border-radius: 2rem;
-background-color: #2a2b38;
-    box-shadow: 0 15px 15px -15px #4d4d4e;
+    background-color: #2a2b38;
+    box-shadow: 0px 0px 40px 20px #e2e49f, inset 0 0 10px #000000;
+
 }
 
 
