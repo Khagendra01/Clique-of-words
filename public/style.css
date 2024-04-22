@@ -120,7 +120,7 @@ background-color: #2a2b38;
 
 .error-message.show {
     max-height: 400px; 
-    padding: 2px 25px;
+    padding: 0px 25px;
     opacity: 1;
     background-color: #1f2029;
     display: inline-flex;

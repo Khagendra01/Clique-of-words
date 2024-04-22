@@ -163,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var hasUppercase = /[A-Z]/.test(passwordValue);
     var hasNumber = /\d/.test(passwordValue);
     var isLongEnough = passwordValue.length >= 8;
+    var isZeroLength = passwordValue.length === 0;
   
     // Select all list items within the error-message container
     var criteriaListItems = document.querySelectorAll('#passwordError ul li');
