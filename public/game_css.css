@@ -222,20 +222,32 @@ button:focus {
   border: none;
   outline: none;
 }
+
 @keyframes shake {
-  0%, 100% {
-      transform: translateX(0);
+
+  0%,
+  100% {
+    transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
-      transform: translateX(-10px);
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-10px);
   }
-  20%, 40%, 60%, 80% {
-      transform: translateX(10px);
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(10px);
   }
 }
 
 .shake {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
 }
 
 .root .main-container .game-container .row .letter input::placeholder {
@@ -281,7 +293,11 @@ button:focus {
   align-items: center;
   justify-content: space-evenly;
 }
-#life_1, #life_2, #life_3, #life_4 {
+
+#life_1,
+#life_2,
+#life_3,
+#life_4 {
   display: inline;
 }
 
@@ -332,7 +348,7 @@ button:focus {
   transform: translate(-50%, -50%);
   width: 800px;
   height: 700px;
-  background: radial-gradient(circle 800px at 30% 70%, #9badee 30%, #eac3ac) fixed; 
+  background: radial-gradient(circle 800px at 30% 70%, #9badee 30%, #eac3ac) fixed;
   padding: 30px;
   border: 2px solid black;
   border-radius: 2rem;
@@ -414,8 +430,8 @@ button:focus {
 }
 
 .settings_container button,
-.rules_container.popup #playGame,
-.root .main-container .game-container .game_info .game_info_buttons button {
+.rules_container.popup #playGame{
+
   background-color: #2a2b39;
   color: #ffffff;
   border: 0;
@@ -425,7 +441,57 @@ button:focus {
   margin: 20px 20px 40px 0px;
   width: 200px;
   position: relative;
+  transition: all 0.5s ease;
 }
+
+.settings_container button:hover,
+.rules_container.popup #playGame:hover{
+  background-color: #ffffff;
+  color: #2a2b39;
+  box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
+  font-size: 25px;
+  transition: all 0.5s ease;
+}
+.settings_container button:active,
+.rules_container.popup #playGame:active{
+  background-color: #2a2b39;
+  color: #ffffff;
+  box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
+  font-size: 25px;
+  transition: all 0.5s ease;
+}
+
+.root .main-container .game-container .game_info .game_info_buttons button {
+  padding: 17px 40px;
+  margin: 0px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: 0;
+  background-color: #2a2b39;
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 15px;
+  transition: all 0.5s ease;
+}
+
+.root .main-container .game-container .game_info .game_info_buttons button:hover {
+  letter-spacing: 3px;
+  background-color: white;
+  color: #2a2b39;
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+.root .main-container .game-container .game_info .game_info_buttons button:active {
+  letter-spacing: 3px;
+  background-color: rgba(238, 224, 118, 0.2);
+  color: hsl(0, 0%, 100%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+
 
 .rules_container.popup #playGame {
   left: 40%;
@@ -571,11 +637,11 @@ label:after {
   width: 0;
 }
 
-input:checked + label {
+input:checked+label {
   background: #242424;
 }
 
-input:checked + label:after {
+input:checked+label:after {
   left: 54px;
   transform: translateX(-100%);
   background: linear-gradient(180deg, #777, #3a3a3a);
@@ -585,17 +651,17 @@ label:active:after {
   width: 29px;
 }
 
-input:checked ~ label ~ .root {
+input:checked~label~.root {
   background: #143e61;
 }
 
-input:checked ~ label ~ .rules_container,
-input:checked ~ label ~ .settings_container {
+input:checked~label~.rules_container,
+input:checked~label~.settings_container {
   color: #fff;
   background: #0d0e0f;
 }
 
-input:checked ~ label ~ * {
+input:checked~label~* {
   color: #fff !important;
   stroke: white;
   fill: white;
@@ -620,6 +686,7 @@ input:checked ~ label ~ * {
 
 /* med */
 @media only screen and (min-width: 641px) and (max-width: 1007px) {
+
   .rules_container,
   .settings_container {
     transform: scale(0.7) translate(-70%, -70%);
