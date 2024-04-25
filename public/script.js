@@ -33,6 +33,26 @@ document.addEventListener("DOMContentLoaded", () => {
   if (userName) {
     userName.addEventListener('input', checkUserNameValidity);
   }
+  function validateUsername(username) {
+    return username.length >= 4;
+  }
+  
+  function validatePassword(password) {
+    const hasLowercase = /[a-z]/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const isLongEnough = password.length >= 8;
+    return hasLowercase && hasUppercase && hasNumber && isLongEnough;
+  }
+  
+  function validateName(name) {
+    return name.length >= 4;
+  }
+  
+  function validateEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
 
 
 
@@ -41,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const loginUsername = $("#loginUsername").value;
     const loginPassword = $("#loginPassword").value;
+    
 
     if (!loginUsername || !loginPassword) {
       showError("Username and password are required.", $("#loginError"));
@@ -84,6 +105,26 @@ document.addEventListener("DOMContentLoaded", () => {
       checkPasswordValidity(); // Show password error if invalid
       return; // Stop further processing if the password is invalid
     }
+    if (!validateUsername(registerUsername)) {
+      showError("Username must be at least 4 characters long.", $("#registerError"));
+      return;
+    }
+
+    if (!validatePassword(registerPassword)) {
+      
+      return;
+    }
+
+    if (!validateName(registerName)) {
+      showError("Name should be at least 4 characters long.", $("#registerError"));
+      return;
+    }
+
+    if (!validateEmail(registerEmail)) {
+      showError("Please enter a valid email address.", $("#registerError"));
+      return;
+    }
+   
 
     const data = {
       username: registerUsername,
@@ -221,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userNameError.classList.remove('show');
     }
   }
+  
 
   // Initial screen setup
   openLoginScreen();

@@ -200,6 +200,19 @@ button:focus {
   transition: transform 1s ease;
 }
 
+.root .main-container .game-container .row .letter:hover{
+  letter-spacing: 3px;
+  background-color: white;
+  color: #040513;
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.root .main-container .game-container .row .letter:hover input::placeholder{
+  color: #040513;
+}
+
 .root .main-container .game-container .row .letter.push-down {
   transform: translateY(10px);
 }
@@ -444,15 +457,29 @@ button:focus {
   transition: all 0.5s ease;
 }
 
-.settings_container button:hover,
+.settings_container button:hover{
+  background-color: #ffffff;
+  color: #2a2b39;
+  box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
+  font-size: 15px;
+  transition: all 0.5s ease;
+
+}
 .rules_container.popup #playGame:hover{
   background-color: #ffffff;
   color: #2a2b39;
   box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
-  font-size: 25px;
+  font-size: 22px;
   transition: all 0.5s ease;
 }
-.settings_container button:active,
+.settings_container button:active{
+  background-color: rgba(238, 224, 118, 0.2);
+  color: #ffffff;
+  box-shadow: 0 10px 10px 0 rgba(238, 224, 118, 0.2);
+  font-size: 15px;
+  transition: all 0.5s ease;
+
+}
 .rules_container.popup #playGame:active{
   background-color: #2a2b39;
   color: #ffffff;
@@ -516,7 +543,7 @@ button:focus {
 
 .settings_container input:focus {
   background-color: white;
-  transform: scale(1.05);
+  transform: scale(1.05) translate(0, 0.2);
   box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
   color: #000;
 }
@@ -554,6 +581,11 @@ button:focus {
   width: fit-content;
   border: none;
   box-shadow: none;
+}
+#close svg:hover ,
+#close_settings svg:hover {
+  stroke: #fff;
+  cursor: pointer;
 }
 
 /* Options */
